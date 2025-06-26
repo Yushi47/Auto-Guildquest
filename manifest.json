@@ -1,0 +1,32 @@
+{
+    "files": {
+        "README.md": "f81431f259d71ddd6b3a52998b7403eb5b5b8c3bd7d2bc005c1d93b4de5c1b10",
+        "defs/C_RECEIVE_PLAYTIME_EVENT_REWARD.99.def": "4ee39ff73b52bf7ef11ed407e5860d7d7d0d6e9e78a280a1e560b2e557c764db",
+        "defs/S_AVAILABLE_EVENT_MATCHING_LIST.3.def": "5d0585b1adbfff672e06967d5785160d9038dce6643e3f9754b16e1e88c2201d",
+        "index.js": "85655009a97607f904245aa099de72bdaf983ceea5e24b3a6f26f27250e39dc7",
+        "module.json": "6737da2a694b56b9cc0def065a2d697dad3a1ca9c2f6d065bba248bcf2b5d00c",
+        "settings_migrator.js": "755a18a76eb558af0ee572b0b6b0792cd2fbc41127c0fd5399bc2063edc204f2",
+        "settings_structure.js": "3198e45e31800cf86ab8035dbe7fb9d0fafa67de87d1513554bd063e34948c21"
+    },
+    "defs": {
+        "C_COMPLETE_DAILY_EVENT": 1,
+        "C_COMPLETE_EXTRA_EVENT": 1,
+        "C_RECEIVE_PLAYTIME_EVENT_REWARD": 99,
+        "C_REQUEST_FIELD_POINT_REWARD": 1,
+        "C_REQUEST_FINISH_GUILD_QUEST": 1,
+        "C_REQUEST_PLAYTIME": 1,
+        "C_REQUEST_RECV_DAILY_TOKEN": 1,
+        "C_REQUEST_START_GUILD_QUEST": 1,
+        "C_RETURN_TO_LOBBY": "raw",
+        "S_AVAILABLE_EVENT_MATCHING_LIST": 3,
+        "S_CHAT": 3,
+        "S_COMPLETE_EVENT_MATCHING_QUEST": 1,
+        "S_FIELD_EVENT_ON_ENTER": "raw",
+        "S_FIELD_EVENT_PROGRESS_INFO": 1,
+        "S_FIELD_POINT_INFO": 2,
+        "S_LOGIN": "event",
+        "S_PLAYTIME_EVENT_REWARD_DATA": 1,
+        "S_SPAWN_ME": "event",
+        "S_UPDATE_GUILD_QUEST_STATUS": 1
+    }
+}
