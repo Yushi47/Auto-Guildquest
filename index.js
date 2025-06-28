@@ -10,11 +10,13 @@ const PLAYTIME_INTERVAL = 1800000;
 module.exports = function AutoGuildquest(mod) {
 	let myQuestId = 0,
 		cleared = 0,
+		claimed = -1,
 		entered = false,
 		hold = false,
 		daily = 0,
 		playTimeInterval = null,
-		previousPlayTimeCheck = null;
+		previousPlayTimeCheck = null,
+		claimLoopActive = false;
 
 	const msg = m => mod.command.message(m);
 
@@ -62,6 +64,7 @@ module.exports = function AutoGuildquest(mod) {
 
 	mod.hook("C_RETURN_TO_LOBBY", "raw", () => {
 		entered = false;
+		claimLoopActive = false;
 	});
 
 	mod.hook("S_COMPLETE_EVENT_MATCHING_QUEST", 1, event => {
@@ -75,8 +78,8 @@ module.exports = function AutoGuildquest(mod) {
 	});
 
 	mod.hook("S_FIELD_EVENT_PROGRESS_INFO", 1, () => {
-		if (mod.settings.Guardian) {
-			completeGuardian();
+		if (mod.settings.Guardian && cleared > claimed) {
+			runGuardianClaimLoop();
 		}
 	});
 
@@ -101,7 +104,36 @@ module.exports = function AutoGuildquest(mod) {
 			});
 		}
 		cleared = event.cleared;
+		claimed = event.claimed;
 	});
+
+	function runGuardianClaimLoop() {
+		if (claimLoopActive || !mod.settings.Guardian) return;
+		claimLoopActive = true;
+
+		let attempts = 0;
+		const maxAttempts = 50;
+
+		const step = () => {
+			if (!mod.settings.Guardian || claimed >= cleared || attempts >= maxAttempts) {
+				claimLoopActive = false;
+				return;
+			}
+
+			mod.send("C_REQUEST_FIELD_POINT_REWARD", 1, {});
+			attempts++;
+
+			if (attempts % 3 === 0) {
+				mod.setTimeout(() => {
+					mod.send("C_REQUEST_ONGOING_FIELD_EVENT_LIST", 1, {});
+				}, 50);
+			}
+
+			mod.setTimeout(step, 150);
+		};
+
+		step();
+	}
 
 	function completeQuest() {
 		mod.send("C_COMPLETE_DAILY_EVENT", 1, { id: myQuestId });
@@ -127,20 +159,6 @@ module.exports = function AutoGuildquest(mod) {
 				message: `You're at ${vgChests} VG chests. Open or bank them immediately.`
 			});
 		}
-	}
-
-	function completeGuardian() {
-		let attempts = 0;
-		const maxPerTrigger = 10;
-
-		const claim = () => {
-			if (!mod.settings.Guardian || attempts >= maxPerTrigger) return;
-			mod.send("C_REQUEST_FIELD_POINT_REWARD", 1, {});
-			attempts++;
-			setImmediate(claim);
-		};
-
-		claim();
 	}
 
 	function dailycredit() {
